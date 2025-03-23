@@ -1,0 +1,29 @@
+/* Apply padding to content for better spacing */
+.content {
+    padding-top: 10px;
+  }
+  
+  /* Use Bootstrap grid system for better responsiveness */
+  .row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  /* Ensure form fields take full width on smaller screens */
+  mat-form-field {
+    width: 100%;
+  }
+  
+  /* Align actions properly using Bootstrap utilities */
+  .action {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  /* Use Bootstrap button classes for consistency */
+  button {
+    min-width: 120px;
+  }

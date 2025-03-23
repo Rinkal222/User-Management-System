@@ -1,0 +1,118 @@
+{
+  "users": [
+    {
+      "userName": "JohnDoee",
+      "email": "johndoe1@example.com",
+      "role": "Admin",
+      "id": "1"
+    },
+    {
+      "userName": "JaneDoe",
+      "email": "janedoe123@example.com",
+      "role": "Admin",
+      "id": "2"
+    },
+    {
+      "userName": "MikeSmith",
+      "email": "mikesmith3@example.com",
+      "role": "Admin",
+      "id": "3"
+    },
+    {
+      "userName": "EmilyClark4",
+      "email": "emilyclark4@example.com",
+      "role": "User",
+      "id": "4"
+    },
+    {
+      "userName": "DavidBrown5",
+      "email": "davidbrown5@example.com",
+      "role": "Admin",
+      "id": "5"
+    },
+    {
+      "userName": "SophiaWhiteq",
+      "email": "sophiawhite6@example.com",
+      "role": "User",
+      "id": "6"
+    },
+    {
+      "userName": "JamesMiller",
+      "email": "jamesmiller7@example.com",
+      "role": "Admin",
+      "id": "7"
+    },
+    {
+      "userName": "OliviaMoore",
+      "email": "oliviamoore8@example.com",
+      "role": "User",
+      "id": "8"
+    },
+    {
+      "userName": "EthanJones",
+      "email": "ethanjones9@example.com",
+      "role": "Admin",
+      "id": "9"
+    },
+    {
+      "userName": "AvaTaylor10",
+      "email": "avataylor10@example.com",
+      "role": "User",
+      "id": "10"
+    },
+    {
+      "userName": "WilliamAnderson",
+      "email": "williamanderson@example.com",
+      "role": "Admin",
+      "id": "11"
+    },
+    {
+      "userName": "CharlotteWalker",
+      "email": "charlottewalker14@example.com",
+      "role": "User",
+      "id": "14"
+    },
+    {
+      "userName": "BenjaminHall15",
+      "email": "benjaminhall15@example.com",
+      "role": "Admin",
+      "id": "15"
+    },
+    {
+      "userName": "AmeliaYoung16",
+      "email": "ameliayoung16@example.com",
+      "role": "User",
+      "id": "16"
+    },
+    {
+      "userName": "HenryKing17",
+      "email": "henryking17@example.com",
+      "role": "Admin",
+      "id": "17"
+    },
+    {
+      "userName": "EllaWright",
+      "email": "ellawright18@example.com",
+      "role": "User",
+      "id": "18"
+    },
+    {
+      "userName": "DanielScott",
+      "email": "danielscott19@example.com",
+      "role": "Admin",
+      "id": "19"
+    },
+    {
+      "userName": "ScarlettGreen20",
+      "email": "scarlettgreen20@example.com",
+      "role": "User",
+      "id": "20"
+    },
+    {
+      "userName": "Demousers",
+      "email": "demouser12@gmail.com",
+      "role": "User",
+      "id": "c353"
+    }
+  ]
+}

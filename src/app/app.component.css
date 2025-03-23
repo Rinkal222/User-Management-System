@@ -1,0 +1,46 @@
+.fixed-top {
+  z-index: 1050;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  /* border-radius: 8px; */
+}
+
+/* Table Styling */
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  
+}
+
+/* Table Header */
+th {
+  font-size: 1rem;
+  text-transform: uppercase;
+  
+
+}
+
+/* Table Row Hover */
+ tr td :hover {
+  background: rgba(0, 0, 0, 0.05) ;
+  
+}
+
+/* Extra Space */
+.extra-space {
+  height: 60px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .fixed-top {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .add-user-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
