@@ -1,41 +1,45 @@
 <!-- User Form Dialog -->
 <div mat-dialog-title>
-    <h1>User Form</h1>
+    <h1 class="text-center">User Form</h1>
 </div>
 
 <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
     <div mat-dialog-content class="content container">
         <div class="row">
             <!-- User Name Field -->
-            <mat-form-field appearance="outline" class="col-md-6">
-                <mat-label>User Name</mat-label>
-                <input matInput type="text" placeholder="Enter name" formControlName="userName">
-                <mat-error *ngIf="userForm.get('userName')?.hasError('required')">Username is required</mat-error>
-            </mat-form-field>
+            <div class="col-12 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>User Name</mat-label>
+                    <input matInput type="text" placeholder="Enter name" formControlName="userName">
+                    <mat-error *ngIf="userForm.get('userName')?.hasError('required')">Username is required</mat-error>
+                </mat-form-field>
+            </div>
 
             <!-- Email Field -->
-            <mat-form-field appearance="outline" class="col-md-6">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" placeholder="Enter email" formControlName="email">
-                <mat-error *ngIf="userForm.get('email')?.hasError('required')">Email is required</mat-error>
-                <mat-error *ngIf="userForm.get('email')?.hasError('pattern')">Invalid email format</mat-error>
-            </mat-form-field>
-        </div>
+            <div class="col-12 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" placeholder="Enter email" formControlName="email">
+                    <mat-error *ngIf="userForm.get('email')?.hasError('required')">Email is required</mat-error>
+                    <mat-error *ngIf="userForm.get('email')?.hasError('pattern')">Invalid email format</mat-error>
+                </mat-form-field>
+            </div>
 
-        <div class="row">
             <!-- Role Selection -->
-            <mat-form-field appearance="outline" class="col-md-12">
-                <mat-label>Role</mat-label>
-                <mat-select formControlName="role">
-                    <mat-option *ngFor="let val of role" [value]="val">{{ val }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="userForm.get('role')?.hasError('required')">Role is required</mat-error>
-            </mat-form-field>
+            <div class="col-12 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Role</mat-label>
+                    <mat-select formControlName="role">
+                        <mat-option *ngFor="let val of role" [value]="val">{{ val }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="userForm.get('role')?.hasError('required')">Role is required</mat-error>
+                </mat-form-field>
+            </div>
         </div>
     </div>
 
     <!-- Action Buttons -->
-    <div mat-dialog-actions class="action text-center">
+    <div mat-dialog-actions class="d-flex justify-content-center gap-2">
         <button mat-raised-button type="button" class="btn btn-secondary" [mat-dialog-close]="false">Cancel</button>
         <button mat-raised-button color="primary" type="submit" class="btn btn-primary">{{ data ? 'Update' : 'Save' }}</button>
     </div>

@@ -1,7 +1,7 @@
+/* Fixed Toolbar */
 .fixed-top {
   z-index: 1050;
   background: linear-gradient(135deg, #007bff, #0056b3);
-  /* border-radius: 8px; */
 }
 
 /* Table Styling */
@@ -10,37 +10,129 @@
   width: 100%;
   background: #fff;
   border-radius: 12px;
-  
 }
 
-/* Table Header */
+/* Table Header & Row Styling */
+th,
+td {
+  padding: 10px;
+  text-align: center;
+}
+
 th {
   font-size: 1rem;
   text-transform: uppercase;
-  
-
+  background-color: #007bff !important;
+  color: white !important;
+  font-weight: bold;
 }
 
-/* Table Row Hover */
- tr td :hover {
-  background: rgba(0, 0, 0, 0.05) ;
-  
+tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease-in-out;
 }
 
-/* Extra Space */
-.extra-space {
-  height: 60px;
+/* Snackbar Styling */
+.custom-snackbar {
+  z-index: 9999 !important;
+  position: fixed !important;
+  bottom: 80px !important;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px 15px;
+}
+
+.snackbar-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.snackbar-error {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+/* Hide table on small screens, show card layout */
+.table-container {
+  display: block;
+}
+
+.card-container {
+  display: none;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .fixed-top {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     text-align: center;
   }
+
+  /* .table-container,
+  .paginator-div {
+    display: none;
+  } */
 
   .add-user-btn {
     width: 40px !important;
     height: 40px !important;
+  }
+
+  .table-container {
+    display: none;
+  }
+  .paginator-div {
+    display: none;
+  } 
+  .card-container {
+    display: block;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  /* Arrow Icon Animation */
+  .arrow-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .arrow-icon mat-icon {
+    font-size: 24px;
+    color: #007bff;
+    transition: transform 0.3s;
+  }
+
+  .arrow-icon[ng-reflect-ng-if="true"] mat-icon {
+    transform: rotate(180deg);
+  }
+
+  /* Fade-in Animation for Actions */
+  .animate-fade {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 0.3s ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

@@ -4,9 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from './services/user.service';
-
 import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AddEditUserComponent } from './component/add-edit-user/add-edit-user.component';
 import { ConfirmDialogComponent } from './component/confirm-dialog/confirm-dialog.component';
@@ -15,30 +13,35 @@ import { ConfirmDialogComponent } from './component/confirm-dialog/confirm-dialo
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush // Enables OnPush change detection for performance optimization
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  title = 'UserManagementSystem'; // Title of the application
-  displayedColumns: string[] = ['id', 'userName', 'email', 'role', 'action']; // Columns to display in the table
-  dataSource!: MatTableDataSource<any>; // Data source for the table
+  title = 'User Management System';
+  displayedColumns: string[] = ['id', 'userName', 'email', 'role', 'action'];
+  dataSource!: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator; // ViewChild for paginator
-  @ViewChild(MatSort) sort!: MatSort; // ViewChild for sorting functionality
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  filteredUsers: any[] = [];
+  searchValue: string = '';
+  sortDirection: any;
+
+  serverError = false;
 
   constructor(
-    private _dialog: MatDialog, // Inject MatDialog for dialog operations
-    private _userService: UserService, // Inject UserService to interact with backend API
-    private _snackBar: MatSnackBar, // Inject MatSnackBar for displaying messages
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef for manual change detection
+    private _dialog: MatDialog,
+    private _userService: UserService,
+    private _snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.getUserList(); // Fetch user list on component initialization
+    this.getUserList();
   }
 
   /**
-   * Opens the Add/Edit User dialog.
-   * After closing the dialog, refreshes the user list if changes were made and shows a success message.
+   * Opens the Add/Edit User dialog and refreshes the user list upon closing.
    */
   openAddEditUserDialogForm() {
     const dialogRef = this._dialog.open(AddEditUserComponent);
@@ -47,86 +50,110 @@ export class AppComponent implements OnInit {
         if (val) {
           this.getUserList();
           this.showSnackbar('User successfully added!');
-
         }
       },
+      error: (err) => this.showSnackbar('An error occurred while adding the user.', 'error'),
     });
   }
 
   /**
-   * Fetches the user list from the backend and initializes the table data source.
+   * Fetches the user list from the backend API and sets up the table.
    */
   getUserList() {
     this._userService.getUser().subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource(res);
-        this.dataSource.sort = this.sort; // Enables sorting on the table
-        this.dataSource.paginator = this.paginator; // Enables pagination on the table
+        if (this.dataSource.data.length === 0) {
+          this.showSnackbar("User hasn't fetched, please add a new user");
+        }
+        this.filteredUsers = this.dataSource.data;
 
-        // Custom filter to match userName and email fields
+        // ✅ Ensure paginator and sorting are set properly
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
+        });
+        // Keep a copy of all users
+        this.filteredUsers = [...res];
+        this.serverError = false;
+        // ✅ Define a proper filter function for searching
         this.dataSource.filterPredicate = (data: any, filter: string) => {
           const userNameMatch = data.userName.toLowerCase().includes(filter);
           const emailMatch = data.email.toLowerCase().includes(filter);
           return userNameMatch || emailMatch;
         };
       },
-      error: (err: any) => {
-        console.log(err); // Logs any error encountered during the API call
+      error: (err) => {
+        this.serverError = true;
+        this.showSnackbar('Failed to load user data.', 'error');
       },
     });
   }
 
+
   /**
-   * Applies a filter to the table data.
-   *
-   * @param event - The event object triggered by the filter input field.
+   * Applies search filter to the user list.
+   * @param event - Input event from the search field.
    */
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.searchValue = filterValue;
     this.dataSource.filter = filterValue;
-  
+    // ✅ Apply filter to Card UI
+    this.filteredUsers = this.dataSource.data.filter(user =>
+      user.userName.toLowerCase().includes(filterValue) ||
+      user.email.toLowerCase().includes(filterValue) ||
+      user.role.toLowerCase().includes(filterValue)
+    );
+
+    // ✅ Reset to first page when filter is applied
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  
-    // this.cdr.detectChanges(); // Manually trigger change detection
+
   }
-  
+  sortCardsBy(property: string) {
+    const direction = this.sortDirection ? 1 : -1;
+    this.filteredUsers.sort((a, b) => {
+      return a[property].toLowerCase() > b[property].toLowerCase() ? direction : -direction;
+    });
+    this.sortDirection = !this.sortDirection; // Toggle sort direction
+  }
+
 
   /**
    * Opens a confirmation dialog before deleting a user.
-   * If confirmed, it deletes the user and refreshes the user list.
-   *
-   * @param id - The ID of the user to be deleted.
+   * @param id - The user ID to be deleted.
    */
   deleteEmployee(id: number) {
     const dialogRef = this._dialog.open(ConfirmDialogComponent, {
       width: '350px',
-      data: { message: 'Are you sure you want to delete this user?', actionLabel: 'Delete' }
+      data: { message: 'Are you sure you want to delete this user?', actionLabel: 'Delete' },
     });
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         this._userService.deleteUsers(id).subscribe({
-          next: (res) => {
-            this.getUserList(); // Refresh user list after deletion
+          next: () => {
+            this.getUserList();
             this.showSnackbar('User successfully deleted!');
           },
-          error: console.log,
+          error: (err) => this.showSnackbar('Failed to delete the user.', 'error'),
         });
       }
     });
   }
 
   /**
-   * Opens the Add/Edit User dialog with existing user data for editing.
-   *
-   * @param data - The user data to be edited.
+   * Opens the Add/Edit dialog with pre-filled data for updating user information.
+   * @param data - The user object to be edited.
    */
   openEditForm(data: any) {
-    const dialogRef = this._dialog.open(AddEditUserComponent, {
-      data,
-    });
+    const dialogRef = this._dialog.open(AddEditUserComponent, { data });
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
@@ -134,28 +161,28 @@ export class AppComponent implements OnInit {
           this.showSnackbar('User successfully updated!');
         }
       },
+      error: (err) => this.showSnackbar('An error occurred while updating the user.', 'error'),
     });
   }
-  
+
   /**
-  * Displays a snackbar message at the center of the screen on mobile devices.
-  *
-  * @param message - The message to display.
-  */
-  private showSnackbar(message: string, event?: MouseEvent) {
-    let horizontalPosition: 'start' | 'center' | 'end' = 'center';
-    let verticalPosition: 'top' | 'bottom' = 'bottom';
-  
-    if (event && window.innerWidth < 768) {
-      const pointerY = event.clientY;
-      verticalPosition = pointerY < window.innerHeight / 2 ? 'top' : 'bottom';
-    }
-  
+   * Displays a snackbar message at the bottom of the screen.
+   * @param message - The message to display.
+   * @param type - Optional type to modify the snackbar appearance.
+   */
+  private showSnackbar(message: string, type: 'success' | 'error' = 'success') {
     this._snackBar.open(message, 'Close', {
       duration: 3000,
-      horizontalPosition,
-      verticalPosition,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: [
+        'custom-snackbar', // Always apply this class
+        type === 'error' ? 'snackbar-error' : 'snackbar-success' // Add dynamic class
+      ],
     });
   }
-  
+  toggleActions(user: any) {
+    user.showActions = !user.showActions;
+  }
+
 }
