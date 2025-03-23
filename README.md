@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # User Management System
 
 A simple User Management System built with **Angular 14**, **Bootstrap**, and **Material UI**.
